@@ -1,6 +1,8 @@
 package com.example.utp1.service;
 import com.example.utp1.model.Estudiante;
+import com.example.utp1.model.Escuela;
 import com.example.utp1.repository.EstudianteRepository;
+import com.example.utp1.repository.EscuelaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,9 @@ public class EstudianteService {
 
     @Autowired
     private EstudianteRepository estudianteRepository;
+
+    @Autowired
+    private EscuelaRepository escuelaRepository;
 
     //Método para obtener todos los estudiantes en una lista
     public List<Estudiante> getEstudiantes() {
@@ -29,11 +34,14 @@ public class EstudianteService {
     //Método para editar un estudiante
     public Estudiante actualizarEstudiante(Long id,Estudiante estudiante) {
         Estudiante estudianteActual = estudianteRepository.findById(id).orElse(null);
-        if(estudianteActual!=null) {
+        //Saber la escuela a la que pertenece el estudiante
+        Escuela escuela = escuelaRepository.findById(estudiante.getEscuela().getId()).orElse(null);
+        if(estudianteActual!=null && escuela!=null) {
             estudianteActual.setCodigo(estudiante.getCodigo());
             estudianteActual.setNombre(estudiante.getNombre());
             estudianteActual.setApellido(estudiante.getApellido());
             estudianteActual.setEmail(estudiante.getEmail());
+            estudianteActual.setEscuela(escuela);
             return estudianteRepository.save(estudianteActual);
         }else{
             return null;
