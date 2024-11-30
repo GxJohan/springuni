@@ -48,4 +48,10 @@ public class EscuelaController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEscuela(@PathVariable Long id){
+        escuelaService.eliminarEscuela(id);
+        return ResponseEntity.noContent().build();
+    }
 }
